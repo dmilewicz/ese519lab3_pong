@@ -551,29 +551,65 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
 			error -= 1;
 		}
 	}
-
 }
 
 // function to draw a filled rectangle
 void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
-	
-}
+	uint8_t x1 = x;
+	uint8_t x2 = x+w;
+	uint8_t y1 = y;
+	uint8_t y2 = y+h;
 
+	for (y=y1; y < y2; y++){
+		drawline(buff, x1, y, x2, y, 0);
+	}	
+}
 
 // function to draw a rectangle
 void drawrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
+	uint8_t x1 = x;
+	uint8_t x2 = x+w;
+	uint8_t y1 = y;
+	uint8_t y2 = y+h;
+
+	drawline(buff, x1, y1, x2, y1, 0);
+	drawline(buff, x1, y2, x2, y2, 0);
+	drawline(buff, x1, y1, x1, y2, 0);
+	drawline(buff, x2, y1, x2, y2, 0);
 	
 }
-
 
 // function to draw a circle
 void drawcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
-	
-}
 
+	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
+		float x = cos(rad);
+		float y = sin(rad);
+		int8_t xpos = x0 + r*x;
+		int8_t ypos = y0 + r*y;
+		_BWP(xpos, ypos);
+	}	
+}
 
 // function to draw a filled circle
 void fillcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
-	
+
+	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
+		float x = cos(rad);
+		float y = sin(rad);
+		int8_t xpos = x0 + r*x;
+		int8_t ypos = y0 + r*y;
+
+		if (xpos > x0){
+		for (uint8_t xline = x0; xline <= xpos; xline++){
+		_BWP(xline, ypos);	
+		}
+	}
+		else{
+			for (uint8_t xline = x0; xline >= xpos; xline--){
+			_BWP(xline, ypos);		
+			}
+		}	
+	}
 }
 
