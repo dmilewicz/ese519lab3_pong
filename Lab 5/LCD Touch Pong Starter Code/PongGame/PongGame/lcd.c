@@ -510,31 +510,44 @@ void clearpixel(uint8_t *buff, uint8_t x, uint8_t y) {
 
 // function to write a string on the lcd
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
-    for (int i = 0; LEN(c); i++) {
+    for (int i = 0; i<strlen(c); i++) {
         drawchar(buff, x, line, c[i]);
         x += 6;
     }
 }
 
 int8_t sign(uint8_t x){
-	if (x > 0) return 1;
-	if (x < 0) return -1;
-	return 0;
+	if (x > 0){
+		return 1;
+	}
+	if (x < 0){
+		return -1;
+	}
+	else{
+		return 0;
+	}
 }
 
 // use bresenham's algorithm to write this function to draw a line
 void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t color) {
-	float deltax = x1-x0;
-	float deltay = y1-y0;
+	int8_t deltax = x1-x0;
+	int8_t deltay = y1-y0;
+	int8_t signy = sign(deltay);
 
-	float deltaerr = abs(deltay / deltax);
+	if (deltax == 0){
+		for (uint8_t y = y0; y < y1; y++){
+			_BWP(x0, y);
+		}
+	}
+
+	float deltaerr = abs((float)deltay / (float)deltax);
 	float error = 0;
 	int y = y0;
-	for (uint8_t x=0; x < deltax+1; x++){
+	for (uint8_t x=x0; x <= x1; x++){
 		_BWP(x,y);
 		error += deltaerr;
 		if (error >= 0.5){
-			y += sign(deltay);
+			y += signy;
 			error -= 1;
 		}
 	}

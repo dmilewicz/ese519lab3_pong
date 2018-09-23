@@ -37,9 +37,9 @@ int main(void)
 	
 	while (1)
 	{
-		drawline(buff, 40, 0, 40, 50, 0);
+		drawline(buff, 0, 0, 0, 60, 0);
 		write_buffer(buff);
-	
+
 
 	}
 }
