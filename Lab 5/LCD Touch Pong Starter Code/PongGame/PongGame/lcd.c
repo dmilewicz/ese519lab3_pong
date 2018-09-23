@@ -487,7 +487,7 @@ void clear_buffer(uint8_t *buff) {
 
 //*********Write the functions mentioned below ********//
 
-//**********an example to get started************//
+//**********an example to get y0ed************//
 
 // this function writes a character on the lcd at a coordinate
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
@@ -530,39 +530,86 @@ int8_t sign(uint8_t x){
 
 // use bresenham's algorithm to write this function to draw a line
 void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t color) {
-	int8_t deltax = x1-x0;
-	int8_t deltay = y1-y0;
-	int8_t signy = sign(deltay);
 
-	if (deltax == 0){
-		for (uint8_t y = y0; y < y1; y++){
-			_BWP(x0, y);
-		}
-	}
 
-	float deltaerr = abs((float)deltay / (float)deltax);
-	float error = 0;
-	int y = y0;
-	for (uint8_t x=x0; x <= x1; x++){
-		_BWP(x,y);
-		error += deltaerr;
-		if (error >= 0.5){
-			y += signy;
-			error -= 1;
-		}
-	}
+
+//	int8_t deltax = x1-x0;
+//	int8_t deltay = y1-y0;
+//	int8_t signy = sign(deltay);
+//
+//	if (deltax == 0){
+//		for (uint8_t y = y0; y < y1; y++){
+//			_BWP(x0, y);
+//		}
+//	}
+//
+//	float deltaerr = abs((float)deltay / (float)deltax);
+//	float error = 0;
+//	int y = y0;
+//	for (uint8_t x=x0; x <= x1; x++){
+//		_BWP(x,y);
+//		error += deltaerr;
+//		if (error >= 0.5){
+//			y += signy;
+//			error -= 1;
+//		}
+//	}
+
+    if (x0 > x1) {
+        swap(x0, x1);
+    }
+    if (y0 > y1) {
+        swap(y0, y1);
+    }
+
+
+
+    uint16_t;
+    uint8_t ybit;
+
+    if (x0 == x1) { // vertical
+        index = _SI(x0 ,y0);
+
+        ybit = _YB(y0);
+
+        uint16_t end_index = _SI(x0, y0);
+
+        for (int i = ybit; i >= 0; i--) {
+            buffer[y0] |= _BV(i);
+        }
+
+        while (index != end_index) {
+            buff[index] = 0xFF;
+            index += COLS;
+        }
+
+        ybit = _YB(end);
+        for (int i = 7; i >= ybit; i--) {
+            buffer[end_index] |= _BV(i);
+        }
+
+    } else { // horizontal
+        ybit = _YB(y0);
+        index = _SI(x0, y0);
+
+        while (y0 <= end) {
+            buff[index++] = _BV(ybit);
+            x0++;
+        }
+
+    }
 
 }
 
 // function to draw a filled rectangle
 void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
-	
+
 }
 
 
 // function to draw a rectangle
 void drawrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
-	
+
 }
 
 
