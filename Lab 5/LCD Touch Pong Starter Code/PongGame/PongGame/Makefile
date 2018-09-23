@@ -1,5 +1,5 @@
 name = output
-device = /dev/tty.usbmodem1441
+device = /dev/tty.usbmodem1421
 src = $(wildcard *.c)
 flags = -std=c11 -Os
 baud = 9600

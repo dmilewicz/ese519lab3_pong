@@ -32,15 +32,15 @@ int main(void)
 	lcd_command(CMD_DISPLAY_ON);
 	lcd_set_brightness(0x18);
 	write_buffer(buff);
-	_delay_ms(10000);
+	_delay_ms(1000);
 	clear_buffer(buff);
 	
 	while (1)
 	{
-		drawchar(buff,0,0,displayChar);
+		drawline(buff, 40, 0, 40, 50, 0);
 		write_buffer(buff);
-		_delay_ms(5000);
-		displayChar++;
+	
+
 	}
 }
 

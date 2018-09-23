@@ -40,7 +40,18 @@
 #define LCDWIDTH 128
 #define LCDHEIGHT 64
 
+#define COLS          128
+#define ROWS_PER_PAGE 8
+
 #define _CV(bit) ~_BV(bit)
+
+#define SCREEN buff
+#define _SI(X, Y)      ((Y/ROWS_PER_PAGE)*COLS) + X
+#define _BWV(X, Y, V)  SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] = V // writes value to byte
+#define _BWP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] |= _BV(Y % ROWS_PER_PAGE) // writes 1 to the given xy position
+#define _BCP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] &= _CV(Y % ROWS_PER_PAGE)
+
+
 
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 extern uint8_t buff[128*64/8];

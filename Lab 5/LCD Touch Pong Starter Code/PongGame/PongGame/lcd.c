@@ -3,7 +3,8 @@
 #include <string.h>
 #include <util/delay.h>
 #include <avr/pgmspace.h>
-#include "lcd.h"
+#include "lcd.h" 
+#include <math.h>
 
 #define SID_DDR DDRD
 #define SID_PIN PIND
@@ -30,8 +31,6 @@
 #define CS_PORT PORTD
 #define CS 2
 
-#define COLS          128
-#define ROWS_PER_PAGE 8
 
 uint8_t is_reversed = 0;
 
@@ -499,24 +498,14 @@ void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
 }
 //*******************//
 
-//ALL MACROS ARE 1-INDEXED WHYYYYYYYYY
-#define SCREEN buff
-#define _SI(X, Y)      ((Y/ROWS_PER_PAGE)*COLS) + X
-#define _BWV(X, Y, V)  SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] = V // writes value to byte
-#define _BWP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] |= _BV(Y % ROWS_PER_PAGE) // writes 1 to the given xy position
-#define _BCP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] &= _BV(Y % ROWS_PER_PAGE)
-
-
-
-
 // the most basic function, set a single pixel
 void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
-	
+	_BWP(x, y);
 }
 
 // function to clear a single pixel
 void clearpixel(uint8_t *buff, uint8_t x, uint8_t y) {
-	
+	_BCP(x, y);
 }
 
 // function to write a string on the lcd
@@ -524,8 +513,28 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
 	
 }
 
+int8_t sign(uint8_t x){
+	if (x > 0) return 1;
+	if (x < 0) return -1;
+	return 0;
+}
+
 // use bresenham's algorithm to write this function to draw a line
 void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t color) {
+	float deltax = x1-x0;
+	float deltay = y1-y0;
+
+	float deltaerr = abs(deltay / deltax);
+	float error = 0;
+	int y = y0;
+	for (uint8_t x=0; x < deltax+1; x++){
+		_BWP(x,y);
+		error += deltaerr;
+		if (error >= 0.5){
+			y += sign(deltay);
+			error -= 1;
+		}
+	}
 
 }
 
