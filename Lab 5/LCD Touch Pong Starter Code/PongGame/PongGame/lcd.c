@@ -30,7 +30,11 @@
 #define CS_PORT PORTD
 #define CS 2
 
+#define COLS          128
+#define ROWS_PER_PAGE 8
+
 uint8_t is_reversed = 0;
+
 
 int pagemap[] = { 3, 2, 1, 0, 7, 6, 5, 4 };
 
@@ -108,6 +112,8 @@ uint8_t buff[128*64/8] = {
 	0x00,0xE0,0xF0,0x70,0x70,0x00,0xE0,0xF0,0x70,0x30,0x30,0x70,0x60,0x00,0xF0,0xF0,
 	0x00,0x00,0x00,0xF0,0xF0,0x00,0x00,0xF0,0xF0,0xF0,0x60,0x70,0x30,0xB0,0xF0,0xE0
 };
+
+
 
 //font to print ascii characters
 const uint8_t font[] PROGMEM = {
@@ -492,6 +498,15 @@ void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
 	}
 }
 //*******************//
+
+//ALL MACROS ARE 1-INDEXED WHYYYYYYYYY
+#define SCREEN buff
+#define _SI(X, Y)      ((Y/ROWS_PER_PAGE)*COLS) + X
+#define _BWV(X, Y, V)  SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] = V // writes value to byte
+#define _BWP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] |= _BV(Y % ROWS_PER_PAGE) // writes 1 to the given xy position
+#define _BCP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] &= _BV(Y % ROWS_PER_PAGE)
+
+
 
 
 // the most basic function, set a single pixel

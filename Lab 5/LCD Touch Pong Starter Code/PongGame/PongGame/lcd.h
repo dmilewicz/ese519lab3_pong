@@ -40,6 +40,8 @@
 #define LCDWIDTH 128
 #define LCDHEIGHT 64
 
+#define _CV(bit) ~_BV(bit)
+
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 extern uint8_t buff[128*64/8];
 void spiwrite(uint8_t c);
