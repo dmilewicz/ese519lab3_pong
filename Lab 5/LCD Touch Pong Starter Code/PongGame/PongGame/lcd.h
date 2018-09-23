@@ -44,6 +44,7 @@
 #define ROWS_PER_PAGE 8
 
 #define _CV(bit) ~_BV(bit)
+#define LEN(val) sizeof(val) / sizeof(val[0])
 
 #define SCREEN buff
 #define _SI(X, Y)      ((Y/ROWS_PER_PAGE)*COLS) + X
