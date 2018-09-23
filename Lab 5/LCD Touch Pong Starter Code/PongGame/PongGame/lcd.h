@@ -41,6 +41,7 @@
 #define LCDHEIGHT 64
 
 #define _CV(bit) ~_BV(bit)
+#define LEN(val) sizeof(val) / sizeof(val[0])
 
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 extern uint8_t buff[128*64/8];

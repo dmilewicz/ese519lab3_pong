@@ -507,8 +507,6 @@ void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
 #define _BCP(X, Y)     SCREEN[((Y/ROWS_PER_PAGE)*COLS) + X] &= _BV(Y % ROWS_PER_PAGE)
 
 
-
-
 // the most basic function, set a single pixel
 void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
 	
@@ -521,7 +519,10 @@ void clearpixel(uint8_t *buff, uint8_t x, uint8_t y) {
 
 // function to write a string on the lcd
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
-	
+    for (int i = 0; LEN(c); i++) {
+        drawchar(buff, x, line, c[i]);
+        x += 6;
+    }
 }
 
 // use bresenham's algorithm to write this function to draw a line
