@@ -37,7 +37,7 @@ int main(void)
 	
 	while (1)
 	{
-		fillcircle(buff, 60, 30, 15, 0);
+		fillrect(buff, 10, 10, 20, 20, 0);
 		write_buffer(buff);
 
 
