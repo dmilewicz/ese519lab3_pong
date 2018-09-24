@@ -37,8 +37,36 @@ int main(void)
 	
 	while (1)
 	{
+		//Geometric & screen control demo
+
+		lcd_command(CMD_SET_ALLPTS_NORMAL);
+		lcd_command(CMD_SET_DISP_NORMAL);
+
+		lcd_command(CMD_SET_VOLUME_FIRST);
+		lcd_command(30);
+
+		drawstring(buff, 0, 0, "Embedded Systems");
+
+		drawline(buff, 40, 50, 75, 50, 0);
+		drawline(buff, 10, 40, 10, 60, 0);
+
 		fillrect(buff, 10, 10, 20, 20, 0);
+		drawrect(buff, 40, 10, 20, 20, 0);
+
+		drawcircle(buff, 100, 20, 10, 0);
+		fillcircle(buff, 100, 50, 10, 0);
+
 		write_buffer(buff);
+
+		_delay_ms(1000);
+
+
+
+		lcd_command(CMD_SET_DISP_REVERSE);
+		_delay_ms(1000);
+		lcd_command(CMD_SET_ALLPTS_ON);
+		_delay_ms(1000);
+
 
 
 	}
