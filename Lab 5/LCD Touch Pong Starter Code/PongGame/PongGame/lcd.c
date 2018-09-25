@@ -563,7 +563,6 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
     }
 
 
-
     uint16_t;
     uint8_t ybit;
 

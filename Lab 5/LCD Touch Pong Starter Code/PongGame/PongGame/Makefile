@@ -1,6 +1,6 @@
 name = output
-device = /dev/tty.usbmodem1421
-src = $(wildcard *.c)
+device = /dev/tty.usbmodem14431
+src = accelerometer.c
 flags = -std=c11 -Os
 baud = 9600
 
