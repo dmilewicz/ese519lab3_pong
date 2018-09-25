@@ -43,7 +43,7 @@ int main(void)
 		lcd_command(CMD_SET_DISP_NORMAL);
 
 		lcd_command(CMD_SET_VOLUME_FIRST);
-		lcd_command(30);
+		lcd_command(32);
 
 		drawstring(buff, 0, 0, "Embedded Systems");
 
