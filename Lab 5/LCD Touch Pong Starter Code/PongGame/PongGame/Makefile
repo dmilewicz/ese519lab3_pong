@@ -1,6 +1,6 @@
 name = output
-device = /dev/tty.usbmodem14431
-src = accelerometer.c
+device = /dev/tty.usbmodem1411
+src = lcd.c main.c
 flags = -std=c11 -Os
 baud = 9600
 

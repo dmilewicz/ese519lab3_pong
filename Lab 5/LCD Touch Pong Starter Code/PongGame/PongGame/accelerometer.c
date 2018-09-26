@@ -7,15 +7,26 @@
 #include "uart.h"
 #include "adc.h"
 
-ISR(ADC_vect) {
-        printf("%d\n", sampler_insert(ADC));
-        ADCSRA |= _BV(ADSC);
-}
+
+
+
 
 int main() {
     uart_init();
     sei();
     adc_init();
 
+
     while(1)  ;
+}
+
+
+ISR(ADC_vect) {
+//    if (circ_sampler_insert(ADC) == sampler_insert(ADC)) {
+//        printf("TRUE\n");
+//    } else {
+//        printf("FALSE\n");
+//    }
+    printf("%d\n", circ_sampler_insert(ADC));
+    ADCSRA |= _BV(ADSC);
 }

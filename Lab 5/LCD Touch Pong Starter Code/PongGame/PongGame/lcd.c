@@ -531,8 +531,6 @@ int8_t sign(uint8_t x){
 // use bresenham's algorithm to write this function to draw a line
 void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t color) {
 
-
-
 //	int8_t deltax = x1-x0;
 //	int8_t deltay = y1-y0;
 //	int8_t signy = sign(deltay);
@@ -562,8 +560,7 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
         swap(y0, y1);
     }
 
-
-    uint16_t;
+    uint16_t index;
     uint8_t ybit;
 
     if (x0 == x1) { // vertical
@@ -571,55 +568,102 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
 
         ybit = _YB(y0);
 
-        uint16_t end_index = _SI(x0, y0);
+        uint16_t end_index = _SI(x0, y1);
+		uint8_t bit2 = 0;
 
-        for (int i = ybit; i >= 0; i--) {
-            buffer[y0] |= _BV(i);
+		if (index == end_index) bit2 = _YB(y1);
+
+        for (int i = ybit; i >= bit2; i--) {
+            buff[index] |= _BV(i);
         }
 
+		// TODO: make pretty
+		if (index == end_index) return;
+
+        index += COLS;
+
         while (index != end_index) {
-            buff[index] = 0xFF;
+            buff[index] |= 0xFF;
             index += COLS;
         }
 
-        ybit = _YB(end);
+        ybit = _YB(y1);
         for (int i = 7; i >= ybit; i--) {
-            buffer[end_index] |= _BV(i);
+            buff[end_index] |= _BV(i);
         }
 
     } else { // horizontal
         ybit = _YB(y0);
         index = _SI(x0, y0);
 
-        while (y0 <= end) {
-            buff[index++] = _BV(ybit);
+        while (x0 <= x1) {
+            buff[index++] |= _BV(ybit);
             x0++;
         }
 
     }
-
 }
 
 // function to draw a filled rectangle
 void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
 
-}
+	uint8_t x1 = x;
+	uint8_t x2 = x+w;
+	uint8_t y1 = y;
+	uint8_t y2 = y+h;
 
+	for (y=y1; y < y2; y++){
+		drawline(buff, x1, y, x2, y, 0);
+	}	
+}
 
 // function to draw a rectangle
 void drawrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
 
-}
+	uint8_t x1 = x;
+	uint8_t x2 = x+w;
+	uint8_t y1 = y;
+	uint8_t y2 = y+h;
 
+	drawline(buff, x1, y1, x2, y1, 0);
+	drawline(buff, x1, y2, x2, y2, 0);
+	drawline(buff, x1, y1, x1, y2, 0);
+	drawline(buff, x2, y1, x2, y2, 0);
+	
+
+}
 
 // function to draw a circle
 void drawcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
-	
-}
 
+	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
+		float x = cos(rad);
+		float y = sin(rad);
+		int8_t xpos = x0 + r*x;
+		int8_t ypos = y0 + r*y;
+		_BWP(xpos, ypos);
+	}	
+}
 
 // function to draw a filled circle
 void fillcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
-	
+
+	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
+		float x = cos(rad);
+		float y = sin(rad);
+		int8_t xpos = x0 + r*x;
+		int8_t ypos = y0 + r*y;
+
+		if (xpos > x0){
+		for (uint8_t xline = x0; xline <= xpos; xline++){
+		_BWP(xline, ypos);	
+		}
+	}
+		else{
+			for (uint8_t xline = x0; xline >= xpos; xline--){
+			_BWP(xline, ypos);		
+			}
+		}	
+	}
 }
 
