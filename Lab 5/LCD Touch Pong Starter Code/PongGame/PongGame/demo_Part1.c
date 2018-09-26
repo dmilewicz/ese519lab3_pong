@@ -37,7 +37,7 @@ int main(void)
 	
 	while (1)
 	{
-		//Geometric & screen control demo
+		//Geometric & screen control demo 
 
 		lcd_command(CMD_SET_ALLPTS_NORMAL);
 		lcd_command(CMD_SET_DISP_NORMAL);
