@@ -1,6 +1,6 @@
 name = output
 device = /dev/tty.usbmodem1421
-src = touchscreen.c
+src = demo_Part1.c lcd.c
 flags = -std=c11 -Os
 baud = 9600
 

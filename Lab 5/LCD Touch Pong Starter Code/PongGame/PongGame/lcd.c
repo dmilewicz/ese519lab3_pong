@@ -531,27 +531,27 @@ int8_t sign(uint8_t x){
 // use bresenham's algorithm to write this function to draw a line
 void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t color) {
 
-//	int8_t deltax = x1-x0;
-//	int8_t deltay = y1-y0;
-//	int8_t signy = sign(deltay);
+//    int8_t deltax = x1-x0;
+//    int8_t deltay = y1-y0;
+//    int8_t signy = sign(deltay);
 //
-//	if (deltax == 0){
-//		for (uint8_t y = y0; y < y1; y++){
-//			_BWP(x0, y);
-//		}
-//	}
+//    if (deltax == 0){
+//        for (uint8_t y = y0; y < y1; y++){
+//            _BWP(x0, y);
+//        }
+//    }
 //
-//	float deltaerr = abs((float)deltay / (float)deltax);
-//	float error = 0;
-//	int y = y0;
-//	for (uint8_t x=x0; x <= x1; x++){
-//		_BWP(x,y);
-//		error += deltaerr;
-//		if (error >= 0.5){
-//			y += signy;
-//			error -= 1;
-//		}
-//	}
+//    float deltaerr = abs((float)deltay / (float)deltax);
+//    float error = 0;
+//    int y = y0;
+//    for (uint8_t x=x0; x <= x1; x++){
+//        _BWP(x,y);
+//        error += deltaerr;
+//        if (error >= 0.5){
+//            y += signy;
+//            error -= 1;
+//        }
+//    }
 
     if (x0 > x1) {
         swap(x0, x1);
