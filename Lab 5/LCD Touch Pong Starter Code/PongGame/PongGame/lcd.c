@@ -5,6 +5,7 @@
 #include <avr/pgmspace.h>
 #include "lcd.h" 
 #include <math.h>
+#include "uart.h"
 
 #define SID_DDR DDRD
 #define SID_PIN PIND
@@ -637,33 +638,36 @@ void drawrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t c
 void drawcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
 
 	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
-		float x = cos(rad);
-		float y = sin(rad);
-		int8_t xpos = x0 + r*x;
-		int8_t ypos = y0 + r*y;
+		float xx = cos(rad);
+		float yy = sin(rad);
+		int8_t xpos = x0 + r*xx;
+		int8_t ypos = y0 + r*yy;
 		_BWP(xpos, ypos);
 	}	
 }
 
 // function to draw a filled circle
 void fillcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
-
+	uart_init();
 	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
-		float x = cos(rad);
-		float y = sin(rad);
-		int8_t xpos = x0 + r*x;
-		int8_t ypos = y0 + r*y;
+		float xx = cos(rad);
+		float yy = sin(rad);
+		int xpos = x0 + r*xx;
+		int ypos = y0 + r*yy;
 
 		if (xpos > x0){
-		for (uint8_t xline = x0; xline <= xpos; xline++){
-		_BWP(xline, ypos);	
+			for (uint8_t xline = x0; xline <= xpos; xline++){
+				//if ((xline >= 0 && xline < COLS) && (ypos >= 0 && ypos < 64))
+					_BWP(xline, ypos);
+
+			}
 		}
-	}
 		else{
 			for (uint8_t xline = x0; xline >= xpos; xline--){
-			_BWP(xline, ypos);		
+				//if ((xline >= 0 && xline < COLS) && (ypos >= 0 && ypos < 64))
+					_BWP(xline, ypos);
 			}
-		}	
+		}
 	}
 }
 

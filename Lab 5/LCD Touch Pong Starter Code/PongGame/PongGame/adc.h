@@ -18,13 +18,7 @@
 
 unsigned int adc_sampler[SAMPLE_SIZE];
 float adc_sampler_avg = 0;
-
-//typedef struct node {
-//    uint16_t val;
-//    node *next;
-//    node *prev;
-//};
-
+int index_last = 0;
 
 struct velocity {
     int deltax, deltay;
@@ -33,7 +27,7 @@ struct velocity {
 void adc_init() {
     ADMUX = _BV(REFS0) | 0x04; // reference V, channel 4
     ADCSRA |= _BV(ADPS0) | _BV(ADPS1) |_BV(ADPS2); // set prescaler
-    ADCSRA |= _BV(ADEN) | _BV(ADIE) | _BV(ADSC); // enables ADC
+    ADCSRA |= _BV(ADEN) | _BV(ADIE) | _BV(ADSC) | _BV(ADATE); // enables ADC
     ADCSRB = 0;
 
     // set array values to 0
@@ -48,6 +42,10 @@ uint8_t adc_bucket(unsigned int input) {
     }
 
     return (uint8_t) ((input - ADC_MIN)/ ((float)(ADC_MAX - ADC_MIN) / NUM_BUCKETS));
+}
+
+uint16_t invert(uint16_t val) {
+    return (ADC_MAX - (val - ADC_MIN));
 }
 
 uint16_t sampler_insert(uint16_t val) {
@@ -65,7 +63,7 @@ uint16_t sampler_insert(uint16_t val) {
     return (uint16_t) adc_sampler_avg;
 }
 
-int index_last = 0;
+
 
 uint16_t circ_sampler_insert(uint16_t val) {
     // replace old value in the running average
