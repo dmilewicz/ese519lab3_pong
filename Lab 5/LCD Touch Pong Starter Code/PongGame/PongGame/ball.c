@@ -25,6 +25,7 @@ char displayChar = 0;
 uint16_t y_curr = 0;
 
 ball b;
+paddle pad;
 
 
 int main(void)
@@ -53,18 +54,26 @@ int main(void)
     b.p.x = 50;
     b.p.y = 50;
 
-    b.v.deltax = 3;
-    b.v.deltay = 4;
+    b.v.deltax = 7;
+    b.v.deltay = 3;
 
     b.r = 5;
+
+    pad.l = 5;
+    pad.w = 2;
+
+
     int x = 125;
     int y = 20;
+    int count = 0;
 
+    char countChar[20];
 
 
     while (1)
     {
         clear_buffer(buff);
+        //drawline(buff, b.r , 0 , b.r, 64, 1);
 
 
 
@@ -73,7 +82,10 @@ int main(void)
 
         collide(&b);
         update_pos(&b.p, &b.v);
+        sprintf(countChar, "%d", count);
+        drawstring(buff, 0, 0, countChar);
         write_buffer(buff);
         _delay_ms(100);
+        count++;
     }
 }

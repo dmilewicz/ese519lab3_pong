@@ -1,6 +1,7 @@
 name = output
-device = /dev/tty.usbmodem1411
+device = /dev/tty.usbmodem1421
 src = ball.c lcd.c
+flags = -std=c11 -Os
 baud = 9600
 
 printf_min = -Wl,-u,vfprintf -lprintf_min #only int/string support
