@@ -25,7 +25,8 @@ char displayChar = 0;
 uint16_t y_curr = 0;
 
 ball b;
-paddle pad;
+paddle padLeft;
+paddle padRight;
 
 
 int main(void)
@@ -53,21 +54,26 @@ int main(void)
 
     b.p.x = 50;
     b.p.y = 50;
-
     b.v.deltax = 7;
     b.v.deltay = 3;
-
     b.r = 5;
 
-    pad.l = 5;
-    pad.w = 2;
+    padLeft.h = 25
+    padleft.w = 2
+    padLeft.p.x = 0
+    padLeft.p.y = 19
+
+    padLeft.h = 25
+    padleft.w = 2
+    padLeft.p.x = 62
+    padLeft.p.y = 19
 
 
     int x = 125;
     int y = 20;
     int count = 0;
 
-    char countChar[20];
+    //char countChar[20];
 
 
     while (1)
@@ -75,15 +81,22 @@ int main(void)
         clear_buffer(buff);
         //drawline(buff, b.r , 0 , b.r, 64, 1);
 
+        fillRect(buff, padLeft.p.x, padLeft.p.y, padLeft.w, padLeft.h, 1);
+        fillRect(buff, padRight.p.x, padRight.p.y, padRight.w, padRight.h, 1)
 
+
+        void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
 
         fillcircle(buff, b.p.x, b.p.y, b.r, 1);
 
+        vert_collide(&b);
+        paddle_collide(&b);
+        horiz_collide(&b);
 
-        collide(&b);
+        //collide(&b);
         update_pos(&b.p, &b.v);
-        sprintf(countChar, "%d", count);
-        drawstring(buff, 0, 0, countChar);
+        //sprintf(countChar, "%d", count);
+        //drawstring(buff, 0, 0, countChar);
         write_buffer(buff);
         _delay_ms(100);
         count++;
