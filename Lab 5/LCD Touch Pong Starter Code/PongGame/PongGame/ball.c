@@ -54,19 +54,19 @@ int main(void)
 
     b.p.x = 50;
     b.p.y = 50;
-    b.v.deltax = 7;
-    b.v.deltay = 3;
+    b.v.deltax = -2;
+    b.v.deltay = 2;
     b.r = 5;
 
-    padLeft.h = 25
-    padleft.w = 2
-    padLeft.p.x = 0
-    padLeft.p.y = 19
+    padLeft.h = 25;
+    padLeft.l = 2;
+    padLeft.p.x = 0;
+    padLeft.p.y = 19;
 
-    padLeft.h = 25
-    padleft.w = 2
-    padLeft.p.x = 62
-    padLeft.p.y = 19
+    padRight.h = 25;
+    padRight.l = 2;
+    padRight.p.x = 127-padRight.l;
+    padRight.p.y = 19;
 
 
     int x = 125;
@@ -81,16 +81,17 @@ int main(void)
         clear_buffer(buff);
         //drawline(buff, b.r , 0 , b.r, 64, 1);
 
-        fillRect(buff, padLeft.p.x, padLeft.p.y, padLeft.w, padLeft.h, 1);
-        fillRect(buff, padRight.p.x, padRight.p.y, padRight.w, padRight.h, 1)
+        fillrect(buff, padLeft.p.x, padLeft.p.y, padLeft.l, padLeft.h, 1);
+        fillrect(buff, padRight.p.x, padRight.p.y, padRight.l, padRight.h, 1);
 
 
-        void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
+        //void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
 
         fillcircle(buff, b.p.x, b.p.y, b.r, 1);
 
         vert_collide(&b);
-        paddle_collide(&b);
+        paddle_collide(&b, &padLeft);
+        paddle_collide(&b, &padRight);
         horiz_collide(&b);
 
         //collide(&b);
@@ -99,6 +100,7 @@ int main(void)
         //drawstring(buff, 0, 0, countChar);
         write_buffer(buff);
         _delay_ms(100);
-        count++;
+        //count++;
+       
     }
 }

@@ -609,9 +609,9 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
 void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
 
 	uint8_t x1 = x;
-	uint8_t x2 = x+w;
+	uint8_t x2 = x+w-1;
 	uint8_t y1 = y;
-	uint8_t y2 = y+h;
+	uint8_t y2 = y+h-1;
 
 	for (y=y1; y < y2; y++){
 		drawline(buff, x1, y, x2, y, 0);
@@ -622,9 +622,9 @@ void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t c
 void drawrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
 
 	uint8_t x1 = x;
-	uint8_t x2 = x+w;
+	uint8_t x2 = x+w-1;
 	uint8_t y1 = y;
-	uint8_t y2 = y+h;
+	uint8_t y2 = y+h-1;
 
 	drawline(buff, x1, y1, x2, y1, 0);
 	drawline(buff, x1, y2, x2, y2, 0);
