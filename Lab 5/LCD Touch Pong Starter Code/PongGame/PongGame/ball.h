@@ -5,6 +5,9 @@
 #ifndef ESE519LAB3_PONG_DEMO_BALL_H
 #define ESE519LAB3_PONG_DEMO_BALL_H
 
+#define MAX_V     10
+#define V_RANGE   MAX_V * 2
+
 extern char score1;
 extern char score2;
 
@@ -103,10 +106,17 @@ void ball_reset(position *p, velocity *v){ //Moves ball back to middle & picks a
 
 
 
-
 int update_pos(position *p, velocity *v) {
     p->x += v->deltax;
     p->y += v->deltay;
+}
+
+int update_pos_paddle(paddle *pad) {
+    if (pad->v.deltay > 0) {
+        pad->p.y = ((pad->p.y + pad->v.deltay) >= LCDHEIGHT - pad->h) ? LCDHEIGHT - pad->h : (pad->p.y + pad->v.deltay);
+    } else {
+        pad->p.y = ((pad->p.y + pad->v.deltay) < 0) ? 0 : pad->p.y + pad->v.deltay;
+    }
 }
 
 

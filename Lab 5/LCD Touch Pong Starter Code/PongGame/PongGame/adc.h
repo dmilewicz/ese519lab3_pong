@@ -20,12 +20,8 @@ unsigned int adc_sampler[SAMPLE_SIZE];
 float adc_sampler_avg = 0;
 int index_last = 0;
 
-struct velocity {
-    int deltax, deltay;
-};
-
-void adc_init() {
-    ADMUX = _BV(REFS0) | 0x04; // reference V, channel 4
+void adc_init(uint8_t chan) {
+    ADMUX = _BV(REFS0) | chan; // reference V, channel 4
     ADCSRA |= _BV(ADPS0) | _BV(ADPS1) |_BV(ADPS2); // set prescaler
     ADCSRA |= _BV(ADEN) | _BV(ADIE) | _BV(ADSC) | _BV(ADATE); // enables ADC
     ADCSRB = 0;
@@ -44,7 +40,17 @@ uint8_t adc_bucket(unsigned int input) {
     return (uint8_t) ((input - ADC_MIN)/ ((float)(ADC_MAX - ADC_MIN) / NUM_BUCKETS));
 }
 
-uint16_t invert(uint16_t val) {
+uint8_t adc_bucket_n(unsigned int input, unsigned int num_buckets) {
+    if (input < ADC_MIN) {
+        return 0;
+    } if (input > ADC_MAX) {
+        return num_buckets - 1;
+    }
+
+    return (uint8_t) ((input - ADC_MIN)/ ((float)(ADC_MAX - ADC_MIN) / num_buckets));
+}
+
+uint16_t adc_invert(uint16_t val) {
     return (ADC_MAX - (val - ADC_MIN));
 }
 

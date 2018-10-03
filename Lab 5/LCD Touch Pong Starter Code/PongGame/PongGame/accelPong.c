@@ -11,7 +11,7 @@
 #include <util/delay.h>
 #include "lcd.h"
 #include "adc.h"
-#include "uart.h"
+//#include "uart.h"
 #include "ball.h"
 
 
@@ -34,6 +34,19 @@ char score1 = '0';
 char score2 = '0';
 
 
+void collide(ball *b, paddle *pad1, paddle *pad2) {
+    vert_collide(b);
+    paddle_collide(b, pad1);
+    paddle_collide(b, pad2);
+    horiz_collide(b);
+}
+
+void move() {
+    update_pos(&b.p, &b.v);
+    update_pos_paddle(&padLeft);
+    update_pos_paddle(&padRight);
+}
+
 int main(void)
 {
     //setting up the gpio for backlight
@@ -46,7 +59,6 @@ int main(void)
     PORTB |= 0x00;
 
     //lcd initialisation
-//    uart_init();
     lcd_init();
     lcd_command(CMD_DISPLAY_ON);
     lcd_set_brightness(0x18);
@@ -54,29 +66,34 @@ int main(void)
     _delay_ms(1000);
     clear_buffer(buff);
 
-    //sei();
-    //adc_init();
+    uart_init();
+
+    sei();
+    adc_init(4);
 
     b.r = 3;
     ball_reset(&b.p, &b.v);
 
-    padLeft.h = 25;
+    padLeft.h = 10;
     padLeft.l = 2;
     padLeft.p.x = 2;
     padLeft.p.y = 19;
+    padLeft.v.deltax = 0;
+    padLeft.v.deltay = 0;
 
-    padRight.h = 25;
+
+    padRight.h = 10;
     padRight.l = 2;
     padRight.p.x = 126-padRight.l;
     padRight.p.y = 19;
-
+    padRight.v.deltax = 0;
+    padRight.v.deltay = 0;
 
     int x = 125;
     int y = 20;
     int count = 0;
 
     //char countChar[20];
-
 
     while (1)
     {
@@ -94,20 +111,12 @@ int main(void)
         fillrect(buff, padLeft.p.x, padLeft.p.y, padLeft.l, padLeft.h, 1);
         fillrect(buff, padRight.p.x, padRight.p.y, padRight.l, padRight.h, 1);
 
-
-        //void fillrect(uint8_t *buff,uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color) {
-
         fillcircle(buff, b.p.x, b.p.y, b.r, 1);
 
-        vert_collide(&b);
-        paddle_collide(&b, &padLeft);
-        paddle_collide(&b, &padRight);
-        horiz_collide(&b);
+        collide(&b, &padLeft, &padRight);
 
-        //collide(&b);
-        update_pos(&b.p, &b.v);
-        //sprintf(countChar, "%d", count);
-        //drawstring(buff, 0, 0, countChar);
+        move();
+
         write_buffer(buff);
         _delay_ms(50);
         //count++;
@@ -115,14 +124,18 @@ int main(void)
     }
 }
 
+char buf[20];
+int counter = 0;
 
 ISR(ADC_vect) {
-//    if (circ_sampler_insert(ADC) == sampler_insert(ADC)) {
-//        printf("TRUE\n");
-//    } else {
-//        printf("FALSE\n");
-//    }
-    y_curr = adc_bucket(v);
-    //printf("%d\n", circ_sampler_insert(ADC));
-    ADCSRA |= _BV(ADSC);
+    if (counter % 50 == 0) {
+        int velocity = adc_bucket_n(circ_sampler_insert(adc_invert(ADC)), V_RANGE) - MAX_V;
+
+
+//        printf("%d\n", velocity);
+
+        padRight.v.deltay = velocity;
+    }
+    counter++;
+
 }

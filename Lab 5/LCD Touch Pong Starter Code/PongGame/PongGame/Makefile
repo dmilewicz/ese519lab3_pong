@@ -1,6 +1,6 @@
 name = output
-device = /dev/tty.usbmodem1411
-src = ball.c lcd.c
+device = /dev/tty.usbmodem1451
+src = accelPong.c lcd.c
 flags = -std=c11 -Os
 baud = 9600
 
