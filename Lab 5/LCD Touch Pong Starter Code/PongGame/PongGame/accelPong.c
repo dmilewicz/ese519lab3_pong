@@ -11,8 +11,9 @@
 #include <util/delay.h>
 #include "lcd.h"
 #include "adc.h"
-//#include "uart.h"
+#include "uart.h"
 #include "ball.h"
+
 
 #define FREQ 16000000
 #define BAUD 9600
@@ -61,12 +62,12 @@ int main(void)
 
     padLeft.h = 25;
     padLeft.l = 2;
-    padLeft.p.x = 3;
+    padLeft.p.x = 2;
     padLeft.p.y = 19;
 
     padRight.h = 25;
     padRight.l = 2;
-    padRight.p.x = 125-padRight.l;
+    padRight.p.x = 126-padRight.l;
     padRight.p.y = 19;
 
 
@@ -112,4 +113,16 @@ int main(void)
         //count++;
        
     }
+}
+
+
+ISR(ADC_vect) {
+//    if (circ_sampler_insert(ADC) == sampler_insert(ADC)) {
+//        printf("TRUE\n");
+//    } else {
+//        printf("FALSE\n");
+//    }
+    y_curr = adc_bucket(v);
+    //printf("%d\n", circ_sampler_insert(ADC));
+    ADCSRA |= _BV(ADSC);
 }

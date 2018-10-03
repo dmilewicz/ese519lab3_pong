@@ -39,6 +39,7 @@
 #define CMD_TEST  0xF0
 #define LCDWIDTH 128
 #define LCDHEIGHT 64
+#define CHARWIDTH 5
 
 #define COLS          128
 #define ROWS_PER_PAGE 8
@@ -56,6 +57,10 @@
 
 
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
+#define max(a, b) { (a > b)? a : b;}
+#define min(a, b) { (a < b)? a : b;}
+
+
 extern uint8_t buff[128*64/8];
 void spiwrite(uint8_t c);
 

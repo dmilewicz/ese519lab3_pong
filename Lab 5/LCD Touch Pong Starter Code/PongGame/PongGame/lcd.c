@@ -554,12 +554,18 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
 //        }
 //    }
 
+	// put smaller in 0 variable
     if (x0 > x1) {
         swap(x0, x1);
     }
     if (y0 > y1) {
         swap(y0, y1);
     }
+
+    if (x1 >= LCDWIDTH || y1 >= LCDHEIGHT) {
+    	return;
+    } 
+
 
     uint16_t index;
     uint8_t ybit;
@@ -648,26 +654,15 @@ void drawcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
 
 // function to draw a filled circle
 void fillcircle(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t r,uint8_t color) {
-	uart_init();
 	for (float rad = 0; rad < 2*M_PI; rad = rad + 0.05){
-		float xx = cos(rad);
-		float yy = sin(rad);
-		int xpos = x0 + r*xx;
-		int ypos = y0 + r*yy;
+		int xpos = x0 + r*cos(rad);
+		int ypos = y0 + r*sin(rad);
 
-		if (xpos > x0){
-			for (uint8_t xline = x0; xline <= xpos; xline++){
-				//if ((xline >= 0 && xline < COLS) && (ypos >= 0 && ypos < 64))
-					_BWP(xline, ypos);
+		if (ypos >= 64) { 
+			continue;
+		}
 
-			}
-		}
-		else{
-			for (uint8_t xline = x0; xline >= xpos; xline--){
-				//if ((xline >= 0 && xline < COLS) && (ypos >= 0 && ypos < 64))
-					_BWP(xline, ypos);
-			}
-		}
+		drawline(buff, x0, ypos, xpos, ypos, 1);
 	}
 }
 
