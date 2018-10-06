@@ -8,6 +8,11 @@
 #define MAX_V     10
 #define V_RANGE   MAX_V * 2
 
+#define MAX(a, b) {(a > b)? a : b}
+#define MIN(a, b) {(a < b)? a : b}
+
+#define BOUND(min, max, x) MAX(MIN(x, max), min)
+
 extern char score1;
 extern char score2;
 
@@ -104,21 +109,22 @@ void ball_reset(position *p, velocity *v){ //Moves ball back to middle & picks a
     } while (abs(v->deltay) < 2);    
 }
 
-
-
 int update_pos(position *p, velocity *v) {
     p->x += v->deltax;
     p->y += v->deltay;
 }
 
 int update_pos_paddle(paddle *pad) {
-    if (pad->v.deltay > 0) {
-        pad->p.y = ((pad->p.y + pad->v.deltay) >= LCDHEIGHT - pad->h) ? LCDHEIGHT - pad->h : (pad->p.y + pad->v.deltay);
-    } else {
-        pad->p.y = ((pad->p.y + pad->v.deltay) < 0) ? 0 : pad->p.y + pad->v.deltay;
-    }
+    pad->p.y = BOUND(0, LCDHEIGHT - pad->h, pad->p.y + pad->v.deltay);
 }
 
+/*
+ *  Run before update_pos_paddle
+ */
+int pad_travel_to(padddle *pad, int y) {
+    int y_center = y - (pad->h / 2);
 
+    pad->v.deltay = BOUND(-MAX_V, MAX_V, y_center - pad->p.y);
+}
 
 #endif //ESE519LAB3_PONG_DEMO_BALL_H
