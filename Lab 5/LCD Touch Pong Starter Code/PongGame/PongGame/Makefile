@@ -1,6 +1,7 @@
 name = output
-device = /dev/tty.usbmodem1451
-src = accelPong.c lcd.c
+device = /dev/tty.usbmodem14101
+#src = accelPong.c lcd.c
+src = touchscreen.c 
 flags = -std=c11 -Os
 baud = 9600
 
@@ -30,3 +31,4 @@ program: build
 
 clean:
 	rm -f $(name).ihex $(name).lst
+

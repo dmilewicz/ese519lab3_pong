@@ -10,8 +10,11 @@
 #define MAX_V     10
 #define V_RANGE   MAX_V * 2
 
-#define MAX(a, b) {(a > b)? a : b}
-#define MIN(a, b) {(a < b)? a : b}
+//#define MAX(a, b) {(a > b)? a : b}
+//#define MIN(a, b) {(a < b)? a : b}
+
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 #define BOUND(min, max, x) MAX(MIN(x, max), min)
 

@@ -57,6 +57,7 @@ int main(void)
     PORTD |= 0x00;
 
     DDRB |= 0x05;
+    DDRB |= 0x08;
     PORTB &= ~0x05;
     PORTB |= 0x00;
 
