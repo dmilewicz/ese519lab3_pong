@@ -64,7 +64,7 @@ int main(void)
     TCCR2A |= (1 << WGM21); //Set CTC bit
     OCR2A = 70; //Comparator value to attain 440 Hz with 256 prescaler
 
-    TCCR2B = (1 << CA21) | (1 << CS22); //Set prescaler to 256
+    TCCR2B = (1 << CS21) | (1 << CS22); //Set prescaler to 256 //Make CA21?
     TCCR2A &= !(1 << COM2A0); //Disconnect buzzer
 
     //lcd initialisation
@@ -75,7 +75,7 @@ int main(void)
     _delay_ms(1000);
     clear_buffer(buff);
 
-    uart_init();
+    //uart_init();
 
     sei();
     adc_init(4);

@@ -47,6 +47,10 @@ void vert_collide(ball *b);
 void horiz_collide(ball *b);
 void paddle_collide(ball *b, paddle *pad);
 void ball_reset(position *p, velocity *v);
+void point_alert();
+//void update_pos(position *p, velocity *v);
+//void update_pos_paddle(paddle *pad);
+//int pad_travel_to(padddle *pad, int y)
 
 
 char buf[20];
@@ -78,7 +82,7 @@ void vert_collide(ball *b) { //Handles ball hitting side wall
             score1 +=1;
         }
 
-        if (score1 == ':') | (score2 == ':'){
+        if (score1 == ':' || score2 == ':'){
             score1 = '0';
             score2 = '0';
         }
@@ -140,7 +144,7 @@ int update_pos_paddle(paddle *pad) {
 /*
  *  Run before update_pos_paddle
  */
-int pad_travel_to(padddle *pad, int y) {
+int pad_travel_to(paddle *pad, int y) {
     int y_center = y - (pad->h / 2);
 
     pad->v.deltay = BOUND(-MAX_V, MAX_V, y_center - pad->p.y);
