@@ -124,6 +124,8 @@ int main(void)
 
         collide(&b, &padLeft, &padRight);
 
+        pad_travel_to(&padLeft, b.p.y);
+
         move();
 
         write_buffer(buff);
