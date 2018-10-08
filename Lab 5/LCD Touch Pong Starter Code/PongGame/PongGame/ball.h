@@ -1,6 +1,8 @@
 //
 // Created by David Milewicz on 9/27/18.
 //
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 #ifndef ESE519LAB3_PONG_DEMO_BALL_H
 #define ESE519LAB3_PONG_DEMO_BALL_H
@@ -45,6 +47,10 @@ void vert_collide(ball *b);
 void horiz_collide(ball *b);
 void paddle_collide(ball *b, paddle *pad);
 void ball_reset(position *p, velocity *v);
+void point_alert();
+//void update_pos(position *p, velocity *v);
+//void update_pos_paddle(paddle *pad);
+//int pad_travel_to(padddle *pad, int y)
 
 
 char buf[20];
@@ -76,6 +82,12 @@ void vert_collide(ball *b) { //Handles ball hitting side wall
             score1 +=1;
         }
 
+        if (score1 == ':' || score2 == ':'){
+            score1 = '0';
+            score2 = '0';
+        }
+
+        point_alert();
         ball_reset(&b->p, &b->v);
         
     }
@@ -112,6 +124,17 @@ void ball_reset(position *p, velocity *v){ //Moves ball back to middle & picks a
     } while (abs(v->deltay) < 2);    
 }
 
+void point_alert(){
+    //buzzer & backlight
+    PORTB |= 0x05; //Turn off blue and green backlights, leave red on
+    //PORTB |= 0x00;
+    TCCR2A |= (1 << COM2A0); //Activate buzzer
+
+    _delay_ms(1000); //1 second delay
+    PORTB &= ~0x05; //Turn blue and green back on
+    TCCR2A &= !(1 << COM2A0); //Disconnect buzzer
+}
+
 int update_pos(position *p, velocity *v) {
     p->x += v->deltax;
     p->y += v->deltay;
@@ -124,7 +147,7 @@ int update_pos_paddle(paddle *pad) {
 /*
  *  Run before update_pos_paddle
  */
-int pad_travel_to(padddle *pad, int y) {
+int pad_travel_to(paddle *pad, int y) {
     int y_center = y - (pad->h / 2);
 
     pad->v.deltay = BOUND(-MAX_V, MAX_V, y_center - pad->p.y);

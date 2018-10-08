@@ -22,6 +22,7 @@
 #define BUFFER 1024
 #define BLACK 0x000001
 #define MAXSCORE 9
+#define BUZZER 0x40
 
 char displayChar = 0;
 uint16_t y_curr = 0;
@@ -51,12 +52,20 @@ int main(void)
 {
     //setting up the gpio for backlight
     DDRD |= 0x80;
+    DDRD |= BUZZER;
     PORTD &= ~0x80;
     PORTD |= 0x00;
 
     DDRB |= 0x05;
     PORTB &= ~0x05;
     PORTB |= 0x00;
+
+    //Buzzer initialization with timer 2
+    TCCR2A |= (1 << WGM21); //Set CTC bit
+    OCR2A = 70; //Comparator value to attain 440 Hz with 256 prescaler
+
+    TCCR2B = (1 << CS21) | (1 << CS22); //Set prescaler to 256 //Make CA21?
+    TCCR2A &= !(1 << COM2A0); //Disconnect buzzer
 
     //lcd initialisation
     lcd_init();
@@ -66,7 +75,7 @@ int main(void)
     _delay_ms(1000);
     clear_buffer(buff);
 
-    uart_init();
+    //uart_init();
 
     sei();
     adc_init(4);

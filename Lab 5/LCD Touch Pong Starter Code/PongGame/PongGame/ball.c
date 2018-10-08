@@ -22,6 +22,7 @@
 #define BLACK 0x000001
 #define MAXSCORE 9
 
+
 char displayChar = 0;
 uint16_t y_curr = 0;
 
@@ -40,9 +41,16 @@ int main(void)
     PORTD &= ~0x80;
     PORTD |= 0x00;
 
+
     DDRB |= 0x05;
     PORTB &= ~0x05;
     PORTB |= 0x00;
+
+    //Buzzer initialization with timer 2
+    TCCR2A |= (1 << WGM21); //Set CTC bit
+    OCR2A = 70; //Comparator value to attain 440 Hz with 256 prescaler
+
+    TCCR2B = (1 << CS02); //Set prescaler to 256
 
     //lcd initialisation
 //    uart_init();
