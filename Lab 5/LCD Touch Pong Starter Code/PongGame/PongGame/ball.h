@@ -90,7 +90,10 @@ void horiz_collide(ball *b) { //Handles ball hitting top or bottom walls
 void paddle_collide(ball *b, paddle *pad) {
         if ((b->p.y >= pad->p.y) && (b->p.y <= pad->p.y + pad->h)) { //Ball is within y constraints of paddle
             if ((abs(b->p.x - pad->p.x) <= b->r) || (abs(b->p.x - (pad->p.x + pad->l - 1)) <= b->r)) {
-              b->v.deltax *= -1;
+                b->v.deltax *= -1;
+
+                int y_center = y - (pad->h / 2);
+                b->v.y += (y_center - b->p.y);
             } 
         }
 
