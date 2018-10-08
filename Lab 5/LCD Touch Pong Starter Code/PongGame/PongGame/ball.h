@@ -1,6 +1,8 @@
 //
 // Created by David Milewicz on 9/27/18.
 //
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 #ifndef ESE519LAB3_PONG_DEMO_BALL_H
 #define ESE519LAB3_PONG_DEMO_BALL_H
@@ -71,6 +73,12 @@ void vert_collide(ball *b) { //Handles ball hitting side wall
             score1 +=1;
         }
 
+        if (score1 == ':') | (score2 == ':'){
+            score1 = '0';
+            score2 = '0';
+        }
+
+        point_alert();
         ball_reset(&b->p, &b->v);
         
     }
@@ -102,6 +110,17 @@ void ball_reset(position *p, velocity *v){ //Moves ball back to middle & picks a
     do {
         v->deltay = (rand() % 10) - 5;
     } while (abs(v->deltay) < 2);    
+}
+
+void point_alert(){
+    //buzzer & backlight
+    PORTB |= 0x05; //Turn off blue and green backlights, leave red on
+    //PORTB |= 0x00;
+    TCCR2A |= (1 << COM2A0); //Activate buzzer
+
+    _delay_ms(1000); //1 second delay
+    PORTB &= ~0x05; //Turn blue and green back on
+    TCCR2A &= !(1 << COM2A0); //Disconnect buzzer
 }
 
 
