@@ -1,7 +1,7 @@
 name = output
 device = /dev/tty.usbmodem14201
-#src = accelPong.c lcd.c
-src = touchscreen.c 
+src = accelPong.c lcd.c
+#src = touchscreen.c 
 flags = -std=c11 -Os
 baud = 9600
 
