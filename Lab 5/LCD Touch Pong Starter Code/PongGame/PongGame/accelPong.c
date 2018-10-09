@@ -57,6 +57,7 @@ int main(void)
     PORTD |= 0x00;
 
     DDRB |= 0x05;
+    DDRB |= 0x08;
     PORTB &= ~0x05;
     PORTB |= 0x00;
 
@@ -143,10 +144,7 @@ ISR(ADC_vect) {
         int velocity = adc_bucket_n(circ_sampler_insert(adc_invert(ADC)), V_RANGE) - MAX_V;
 
 
-//        printf("%d\n", velocity);
-
         padRight.v.deltay = velocity;
     }
     counter++;
-
 }
