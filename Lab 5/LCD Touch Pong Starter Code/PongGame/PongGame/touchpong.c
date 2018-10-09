@@ -1,9 +1,9 @@
 //
-// Created by David Milewicz on 9/27/18.
+// Created by David Milewicz on 10/9/18.
 //
 
-
-#define ACCEL
+#define TOUCH
+#define ONE_P
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -16,6 +16,7 @@
 #include "adc.h"
 //#include "uart.h"
 #include "ball.h"
+#include "touchscreen.h"
 
 
 #define FREQ 16000000
@@ -49,6 +50,12 @@ void move() {
     update_pos(&b.p, &b.v);
     update_pos_paddle(&padLeft);
     update_pos_paddle(&padRight);
+}
+
+void ai_move() {
+#ifdef ONE_P
+    pad_travel_to(&padLeft, b.p.y);
+#endif
 }
 
 int main(void)
@@ -103,6 +110,8 @@ int main(void)
     padRight.v.deltax = 0;
     padRight.v.deltay = 0;
 
+    y_read();
+
     int x = 125;
     int y = 20;
     int count = 0;
@@ -112,6 +121,7 @@ int main(void)
     while (1)
     {
         clear_buffer(buff);
+        //drawline(buff, b.r , 0 , b.r, 64, 1);
 
         drawline(buff, 0, 0, 127, 0, 1);
         drawline(buff, 0, 0, 0, 63, 1);
@@ -130,15 +140,14 @@ int main(void)
 
         collide(&b, &padLeft, &padRight);
 
-        // ai move
-        pad_travel_to(&padLeft, b.p.y);
+        ai_move();
 
         move();
 
         write_buffer(buff);
         _delay_ms(50);
         //count++;
-       
+
     }
 }
 
@@ -146,14 +155,22 @@ char buf[20];
 int counter = 0;
 
 ISR(ADC_vect) {
-    if (counter % 50 == 0) {
-        int velocity = adc_bucket_n(circ_sampler_insert(adc_invert(ADC)), V_RANGE) - MAX_V;
+        if (counter % 50 == 0) {
+            int y_pos = adc_bucket_n(adc_invert(ADC), LCDHEIGHT);
 
-        padRight.v.deltay = velocity;
-    }
-    counter++;
+#if defined(ONE_P)
+            pad_travel_to(&padRight, y_pos);
+#else
+            if (b.v.deltax > 0) {
+                pad_travel_to(&padRight, y_pos);
+            } else {
+                pad_travel_to(&padLeft, y_pos);
+            }
+#endif
+        }
+        counter++;
 }
 
 ISR (TIMER1_OVF_vect){
-    TCCR2A &= ~(1 <<COM2A0); //disconnect buzzer
+        TCCR2A &= ~(1 <<COM2A0); //disconnect buzzer
 }

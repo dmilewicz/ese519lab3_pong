@@ -8,13 +8,24 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-#define INVERT
-
 #define NUM_BUCKETS  59
 #define SAMPLE_SIZE  10
 
+#define INVERT
+
+#if defined(ACCEL)
+
 #define ADC_MIN 280
 #define ADC_MAX 410
+
+#elif defined(TOUCH)
+
+#define ADC_MIN 217
+#define ADC_MAX 774
+
+#endif
+
+
 
 unsigned int adc_sampler[SAMPLE_SIZE];
 float adc_sampler_avg = 0;
