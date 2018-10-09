@@ -80,6 +80,7 @@ int main(void)
 
     sei();
     adc_init(4);
+    timer1_init();
 
     b.r = 3;
     ball_reset(&b.p, &b.v);
@@ -150,4 +151,10 @@ ISR(ADC_vect) {
     }
     counter++;
 
+}
+
+ISR (TIMER1_OVF_vect){
+    //while(1);
+    TCCR2A &= ~(1 <<COM2A0); //disconnect buzzer
+    //TIMSK1 &= !(1 << TOIE1); //disables interrupts
 }

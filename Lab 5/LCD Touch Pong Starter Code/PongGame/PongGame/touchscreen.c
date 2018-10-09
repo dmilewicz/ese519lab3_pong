@@ -11,7 +11,7 @@ volatile int y_touch = 0;
 #define X_minus PC1
 
 
-void x_read(){
+void y_read(){
 
 	DDRB |= (1 << X_plus); //Set X+ as digital output
 	PORTB &= ~(1 << X_plus); //Set X+ low
@@ -29,7 +29,7 @@ void x_read(){
 }
 
 
-void y_read(){
+void x_read(){
 
 	DDRB |= (1 << Y_plus); //Set Y+ as digital output
 	PORTB &= ~(1 << Y_plus); //Set Y+ low
