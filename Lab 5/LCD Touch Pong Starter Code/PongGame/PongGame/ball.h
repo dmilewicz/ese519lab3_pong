@@ -10,8 +10,8 @@
 #define MAX_V     10
 #define V_RANGE   MAX_V * 2
 
-#define MAX(a, b) {(a > b)? a : b}
-#define MIN(a, b) {(a < b)? a : b}
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 #define BOUND(min, max, x) MAX(MIN(x, max), min)
 
@@ -104,8 +104,8 @@ void paddle_collide(ball *b, paddle *pad) {
             if ((abs(b->p.x - pad->p.x) <= b->r) || (abs(b->p.x - (pad->p.x + pad->l - 1)) <= b->r)) {
                 b->v.deltax *= -1;
 
-                int y_center = y - (pad->h / 2);
-                b->v.y += (y_center - b->p.y);
+                int y_center = pad->p.y - (pad->h / 2);
+                b->v.deltay += (b->p.y - y_center);
             } 
         }
 
