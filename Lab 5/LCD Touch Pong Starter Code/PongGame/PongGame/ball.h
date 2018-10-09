@@ -10,9 +10,6 @@
 #define MAX_V     10
 #define V_RANGE   MAX_V * 2
 
-//#define MAX(a, b) {(a > b)? a : b}
-//#define MIN(a, b) {(a < b)? a : b}
-
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
@@ -112,14 +109,16 @@ void horiz_collide(ball *b) { //Handles ball hitting top or bottom walls
 
 void paddle_collide(ball *b, paddle *pad) {
         if ((b->p.y >= pad->p.y) && (b->p.y <= pad->p.y + pad->h)) { //Ball is within y constraints of paddle
-            if ((abs(b->p.x - pad->p.x) <= b->r) || (abs(b->p.x - (pad->p.x + pad->l - 1)) <= b->r)) {
-              b->v.deltax *= -1;
-              point_alert();
-            } 
+            if ((b->v.deltax > 0 && (abs(b->p.x - pad->p.x) <= b->r)) ||  // Right
+                (b->v.deltax < 0 &&  abs(b->p.x - (pad->p.x + pad->l - 1)) <= b->r)) // Left
+            {
+                b->v.deltax *= -1;
+
+                int y_center = pad->p.y + (pad->h / 2);
+                b->v.deltay += BOUND(-3, 3, (b->p.y - y_center));
+                point_alert();
+            }
         }
-
-
-
 }
 
 void ball_reset(position *p, velocity *v){ //Moves ball back to middle & picks a random pathway for it
@@ -147,8 +146,6 @@ void point_alert(){
 
 }
 
-
-
 void win_alert(){
     score1 = '0';
     score2 = '0';
@@ -161,7 +158,6 @@ void win_alert(){
     PORTB &= ~0x05; //Turn blue and green back on
     TCCR2A &= !(1 << COM2A0); //Disconnect buzzer
 }
-
 
 int update_pos(position *p, velocity *v) {
     p->x += v->deltax;

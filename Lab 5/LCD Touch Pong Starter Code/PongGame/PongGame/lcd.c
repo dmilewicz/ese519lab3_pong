@@ -34,6 +34,7 @@
 
 
 uint8_t is_reversed = 0;
+#define MIN(a,b) (((a)<(b))?(a):(b))
 
 
 int pagemap[] = { 3, 2, 1, 0, 7, 6, 5, 4 };
@@ -609,6 +610,19 @@ void drawline(uint8_t *buff,uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8
         }
 
     }
+}
+
+void drawdottedline(uint8_t *buff,uint8_t x, uint8_t y0, uint8_t y1,uint8_t seg) {
+
+	if (y0 > y1) {
+		swap(y0, y1);
+	}
+
+	int y_run = y0;
+	do {
+		drawline(buff, x, y_run, x, MIN(y_run + seg, LCDHEIGHT), 1);
+		y_run += (int) seg * 2;
+	} while (y_run < LCDHEIGHT);
 }
 
 // function to draw a filled rectangle

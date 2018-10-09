@@ -90,6 +90,8 @@ void drawline(uint8_t *buff,
 uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
 uint8_t color);
 
+void drawdottedline(uint8_t *buff,uint8_t x, uint8_t y0, uint8_t y1,uint8_t seg);
+
 void drawcircle(uint8_t *buff,
 uint8_t x0, uint8_t y0, uint8_t r,
 uint8_t color);
