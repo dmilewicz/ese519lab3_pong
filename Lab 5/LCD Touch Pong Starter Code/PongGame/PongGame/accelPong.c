@@ -136,7 +136,7 @@ int main(void)
         move();
 
         write_buffer(buff);
-        _delay_ms(50);
+//        _delay_ms();
         //count++;
        
     }
